@@ -51,7 +51,7 @@ const ShowTodo = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+       
         const rest = todo.map(item => {
           if (item._id === id && item.completed === false) {
             
