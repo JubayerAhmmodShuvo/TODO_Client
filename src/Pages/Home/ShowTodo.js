@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
+ import { toast } from "react-toastify"; 
 
 const ShowTodo = () => {
   const [user] = useAuthState(auth);
   const [todo, setTodo] = useState([]);
+  const [line,setLine] = useState(false);
   
   if (user) {
     fetch(`http://localhost:5000/todos?email=${user.email}`, {
@@ -18,6 +20,60 @@ const ShowTodo = () => {
      
    
   }
+   const handleDeleteBtn = id => {
+        const confirm = window.confirm('Want to delete this item');
+        if (confirm) {
+            const url = `http://localhost:5000/todos/${id}`;
+            fetch(url, {
+                method: 'DELETE',
+            })
+                .then(res => res.json())
+                .then(data => {
+                  const rest = todo.filter(item => item._id !== id);
+                  setTodo(rest);
+                  toast.info("Delete Successful", {
+                    theme: "colored",
+                  });
+                    
+                })
+        }
+    }
+  const strikeThrouth = id => {
+    const url = `http://localhost:5000/todos/${id}`;
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        completed: true,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        const rest = todo.map(item => {
+          if (item._id === id && item.completed === false) {
+            
+            return { ...item, completed: true };
+
+
+          }
+          return item;
+        });
+        setTodo(rest);
+        toast.success("Task Completed", {
+          theme: "colored",
+        });
+      });
+  }
+
+  
+   
+  
+    
+  
+ 
 
   return (
     <div>
@@ -38,10 +94,27 @@ const ShowTodo = () => {
                 <th>{index + 1}</th>
                 <td>{todo.name}</td>
                 <td>{todo.description}</td>
-                <td><button>X</button></td>
-                <td><button>X</button></td>
-               
-               
+                <td>
+                  <button
+                    onClick={() => strikeThrouth(todo._id)}
+                    class="btn btn-xs btn-success"
+                    style={{
+                     
+                    textDecorationLine: todo.completed ? "line-through" : "none",
+                    }}
+                  >
+                    Complete
+                  </button>
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleDeleteBtn(todo._id)}
+                    class="btn btn-xs btn-error"
+                   
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
