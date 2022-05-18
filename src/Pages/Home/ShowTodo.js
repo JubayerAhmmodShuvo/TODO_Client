@@ -9,7 +9,7 @@ const ShowTodo = () => {
   const [line,setLine] = useState(false);
   
   if (user) {
-    fetch(`http://localhost:5000/todos?email=${user.email}`, {
+    fetch(`https://polar-mesa-90175.herokuapp.com/todos?email=${user.email}`, {
       method: "GET",
       headers: {
         authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -23,7 +23,7 @@ const ShowTodo = () => {
    const handleDeleteBtn = id => {
         const confirm = window.confirm('Want to delete this item');
         if (confirm) {
-            const url = `http://localhost:5000/todos/${id}`;
+            const url = `https://polar-mesa-90175.herokuapp.com/todos/${id}`;
             fetch(url, {
                 method: 'DELETE',
             })
@@ -39,7 +39,7 @@ const ShowTodo = () => {
         }
     }
   const strikeThrouth = id => {
-    const url = `http://localhost:5000/todos/${id}`;
+    const url = `https://polar-mesa-90175.herokuapp.com/todos/${id}`;
     fetch(url, {
       method: "PUT",
       headers: {
