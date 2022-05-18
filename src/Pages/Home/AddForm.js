@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 
 const AddForm = () => {
  const [user] = useAuthState(auth);
- const [todo, setTodo] = useState({});
+ const [todo, setTodo] = useState([]);
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
     const url = `http://localhost:5000/todos`;
@@ -35,9 +35,16 @@ const AddForm = () => {
       >
         <input
           className="input input-bordered input-secondary w-full max-w-xs"
+          value={user?.email} 
+          readOnly
+          {...register("email", { required: true, maxLength: 40 })}
+        />
+        <input
+          className="input input-bordered input-secondary w-full max-w-xs"
           placeholder="Task Name"
           {...register("name", { required: true, maxLength: 30 })}
         />
+
         <textarea
           className="input input-bordered input-secondary w-full h-32 "
           placeholder="Description"
@@ -45,8 +52,6 @@ const AddForm = () => {
         />
         <button className="btn btn-outline btn-primary ">ADD</button>
       </form>
-
-      
     </div>
   );
 };
