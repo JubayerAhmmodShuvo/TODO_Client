@@ -1,9 +1,10 @@
 import React from 'react';
+import AddForm from './AddForm';
 
 const Home = () => {
   return (
-    <div>
-      
+    <div className="">
+      <AddForm />
     </div>
   );
 };
